@@ -148,82 +148,87 @@ fn compare_versions(
 
 /* SCAPER */
 fn find_online_programs(_app_list: &Vec<LocalFoundApp>) -> Vec<OnlineFoundApp> {
+    println!("Looking for online apps");
     let version_brackets_regex = Regex::new(r"\(v.*?\)").unwrap();
     let version_bare_regex = Regex::new(r"v[.\d]* ").unwrap();
     let magnet_regex = Regex::new(r#"href="magnet:\?xt.*?""#).unwrap();
     let name_regex = Regex::new(r#"<b>Adobe .*<wbr>"#).unwrap();
     //if temp is missing make it, delete previous tracker.php file if there is one
     match std::fs::read_dir("./temp") {
-        Ok(_) => std::fs::remove_file("./temp/tracker.php").unwrap_or(()),
+        Ok(_) => {
+            if !std::fs::exists("./temp/tracker.php").unwrap() {
+                //Downloads file
+                let mut downloader = Downloader::builder()
+                    .download_folder(std::path::Path::new("./temp"))
+                    .build()
+                    .unwrap();
+                let dl = downloader::Download::new("http://rutracker.ru/tracker.php?pid=1334502");
+
+                let result = downloader.download(&[dl]).unwrap();
+
+                if let Err(dl_err) = &result[0] {
+                    panic!("Failed downloading website, {}", dl_err);
+                }
+            }
+        }
         Err(_) => std::fs::create_dir("./temp").unwrap(),
     }
 
-    //Downloads file
-    let mut downloader = Downloader::builder()
-        .download_folder(std::path::Path::new("./temp"))
-        .build()
-        .unwrap();
-    let dl = downloader::Download::new("http://rutracker.ru/tracker.php?pid=1334502");
-
-    let result = downloader.download(&[dl]).unwrap();
-
     //if downloaded, parse site
     let mut online_apps = Vec::new();
-    if result[0].is_ok() {
-        println!();
-        let website_file = fs::read_to_string("./temp/tracker.php").unwrap();
-        for (web_line_i, web_line) in website_file.lines().enumerate() {
-            if web_line.to_ascii_lowercase().contains("adobe") {
-                let mut version = "".to_owned();
-                let mut name = "".to_owned();
-                if let Some(res) = name_regex.find(web_line) {
-                    name = web_line
-                        .get(res.start() + 3..res.end() - 5)
-                        .unwrap()
-                        .to_string();
-                }
-                if let Some(res) = version_brackets_regex.find(web_line) {
-                    version = web_line
-                        .get(res.start() + 2..res.end() - 1)
-                        .unwrap()
-                        .to_string();
-                    if version.contains("<wbr>") {
-                        version.pop();
-                        version.pop();
-                        version.pop();
-                        version.pop();
-                        version.pop();
-                    }
-                } else if let Some(res) = version_bare_regex.find(web_line) {
-                    version = web_line
-                        .get(res.start() + 1..res.end() - 1)
-                        .unwrap()
-                        .to_string();
-                    version = version.trim().to_string();
-                }
-
-                let mut magnet = "".to_string();
-                for magnet_web_line in website_file.lines().skip(web_line_i) {
-                    if magnet_web_line.contains("href=\"magnet:?") {
-                        if let Some(magnet_res) = magnet_regex.find(magnet_web_line) {
-                            magnet = magnet_web_line
-                                .get(magnet_res.start() + 6..magnet_res.end() - 1)
-                                .unwrap()
-                                .to_owned();
-                            break;
-                        }
-                    }
-                }
-                println!("App: {}\nVersion: {}\nMagnet:{}\n", &name, &version, magnet);
-                let online_app = OnlineFoundApp {
-                    name,
-                    magnet,
-                    version,
-                };
-                online_apps.push(online_app.clone());
+    println!();
+    let website_file = fs::read_to_string("./temp/tracker.php").unwrap();
+    for (web_line_i, web_line) in website_file.lines().enumerate() {
+        if web_line.to_ascii_lowercase().contains("adobe") {
+            let mut version = "".to_owned();
+            let mut name = "".to_owned();
+            if let Some(res) = name_regex.find(web_line) {
+                name = web_line
+                    .get(res.start() + 3..res.end() - 5)
+                    .unwrap()
+                    .to_string();
             }
+            if let Some(res) = version_brackets_regex.find(web_line) {
+                version = web_line
+                    .get(res.start() + 2..res.end() - 1)
+                    .unwrap()
+                    .to_string();
+                if version.contains("<wbr>") {
+                    version.pop();
+                    version.pop();
+                    version.pop();
+                    version.pop();
+                    version.pop();
+                }
+            } else if let Some(res) = version_bare_regex.find(web_line) {
+                version = web_line
+                    .get(res.start() + 1..res.end() - 1)
+                    .unwrap()
+                    .to_string();
+                version = version.trim().to_string();
+            }
+
+            let mut magnet = "".to_string();
+            for magnet_web_line in website_file.lines().skip(web_line_i) {
+                if magnet_web_line.contains("href=\"magnet:?") {
+                    if let Some(magnet_res) = magnet_regex.find(magnet_web_line) {
+                        magnet = magnet_web_line
+                            .get(magnet_res.start() + 6..magnet_res.end() - 1)
+                            .unwrap()
+                            .to_owned();
+                        break;
+                    }
+                }
+            }
+            println!("App: {}\nVersion: {}\nMagnet:{}\n", &name, &version, magnet);
+            let online_app = OnlineFoundApp {
+                name,
+                magnet,
+                version,
+            };
+            online_apps.push(online_app.clone());
         }
-    };
+    }
     online_apps
 }
 

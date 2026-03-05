@@ -3,6 +3,8 @@ a simple app that checks for updates for your locally installed (torrented) Adob
 
 Also provides a simple downloader for apps that are not installed.
 
+## RELEASES ARE NO LONGER BEING KEPT UP TO DATE. PLEASE FOLLOW [SOURCE INSTALLATION INSTRUCTIONS](#how-to-install-from-source)
+
 QnA:
 > Do I need to be worried about this app being Malware?
 
@@ -14,3 +16,12 @@ This programs Source code is free for you to read, and you can see yourself if t
 2. Downloads the following page to a `./temp/` folder next to the .exe file: [http://rutracker.ru/tracker.php?pid=1334502](http://rutracker.ru/tracker.php?pid=1334502), then extracts latest app downloads.
 3. Compares the online version with local versions and provides a [magnet link](https://en.wikipedia.org/wiki/Magnet_URI_scheme) you can open with the torrent downloader app of your choise.
 ![image](https://github.com/djkato/m0nkrus-adobe-tracker/assets/25299243/d43d634a-7efe-4403-b8c8-e9478cee88d9)
+
+## How to install from source
+
+1. get rustup (cargo, rustc etc) from [here](https://www.rust-lang.org/tools/install)
+2. put into $PATH (google how)
+3. download this repository via git or download as zip button on the top right
+4. go to folder with code (unzip if necessary), and run `cargo build --release`
+5. App is now built, can be found inside `./target/release/adobe_update_checker_torrent.exe`
+6. run, hf!
