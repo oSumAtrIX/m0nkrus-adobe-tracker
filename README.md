@@ -3,7 +3,7 @@
 # M0nkrus Adobe Tracker
 
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/oSumAtrIX/m0nkrus-adobe-tracker?style=flat-square)](https://github.com/oSumAtrIX/m0nkrus-adobe-tracker/releases)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/oSumAtrIX/m0nkrus-adobe-tracker/release?style=flat-square)](https://github.com/oSumAtrIX/m0nkrus-adobe-tracker/actions)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/osumatrix/m0nkrus-adobe-tracker/release.yml?style=flat-square)](https://github.com/oSumAtrIX/m0nkrus-adobe-tracker/actions)
 [![GitHub](https://img.shields.io/github/license/oSumAtrIX/m0nkrus-adobe-tracker?style=flat-square)](LICENSE)
 
 Check locally installed Adobe app updates and find M0nkrus magnets for downloads and provides downloads for other Adobe apps not installed.
