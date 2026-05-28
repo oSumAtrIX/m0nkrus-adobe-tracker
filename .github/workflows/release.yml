@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  release:
+    name: Release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Install Rust toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@1
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "target/release/*.exe"

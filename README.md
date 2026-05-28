@@ -1,35 +1,36 @@
+<div align="center">
+
 # M0nkrus Adobe Tracker
 
-a simple app that checks for updates for your locally installed (torrented) Adobe apps and provides M0nkrus magnets for downloads.
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/oSumAtrIX/m0nkrus-adobe-tracker?style=flat-square)](https://github.com/oSumAtrIX/m0nkrus-adobe-tracker/releases)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/oSumAtrIX/m0nkrus-adobe-tracker/release?style=flat-square)](https://github.com/oSumAtrIX/m0nkrus-adobe-tracker/actions)
+[![GitHub](https://img.shields.io/github/license/oSumAtrIX/m0nkrus-adobe-tracker?style=flat-square)](LICENSE)
 
-Also provides a simple downloader for apps that are not installed.
+Check locally installed Adobe app updates and find M0nkrus magnets for downloads and provides downloads for other Adobe apps not installed.
 
-## RELEASES ARE NO LONGER BEING KEPT UP TO DATE. PLEASE FOLLOW [SOURCE INSTALLATION INSTRUCTIONS](#how-to-install-from-source)
+<img src="./assets/example.png" alt="Example screenshot" width="700" />
 
-### How to use:
+</div>
 
-App might no longer be able to download the site for you.
-If you don't see any available updates in the app, Please go to [http://rutracker.ru/tracker.php?pid=1334502](http://rutracker.ru/tracker.php?pid=1334502) manually, hit `ctrl+s`,
-and save the file to `./temp/tracker.php` as a php file. To check new updates, delete the file and re-download the site manually.
+## Features
 
-QnA:
+- Check for updates for locally installed Adobe apps and find M0nkrus magnets for updates and downloads for other Adobe apps
+- Run in the system tray for easy access
+- Send Windows notifications for updates
+- Run on boot
 
->  Do I need to be worried about this app being Malware?
+## How it works
 
-This programs Source code is free for you to read, and you can see yourself if there are any malicious lines of code. If there was, this github link would be down :)
-
-> How does it work?
-
-1. The app goes through your folder at `C:\Program Files\Adobe` and checks for installed apps. Tries to find the file `application.xml` and extract the program version information from there.
-2. Downloads the following page to a `./temp/` folder next to the .exe file: [http://rutracker.ru/tracker.php?pid=1334502](http://rutracker.ru/tracker.php?pid=1334502), then extracts latest app downloads.
-3. Compares the online version with local versions and provides a [magnet link](https://en.wikipedia.org/wiki/Magnet_URI_scheme) you can open with the torrent downloader app of your choise.
-   ![image](https://github.com/djkato/m0nkrus-adobe-tracker/assets/25299243/d43d634a-7efe-4403-b8c8-e9478cee88d9)
+1. Find installed Adobe apps and their versions from the Windows registry.
+2. Fetch the latest versions from RuTracker.
+3. Compare the versions and show the update information and magnet links.
 
 ## How to install from source
 
-1. get rustup (cargo, rustc etc) from [here](https://www.rust-lang.org/tools/install)
-2. put into $PATH (google how)
-3. download this repository via git or download as zip button on the top right
-4. go to folder with code (unzip if necessary), and run `cargo build --release`
-5. App is now built, can be found inside `./target/release/adobe_update_checker_torrent.exe`
-6. run, hf!
+1. Install Rust [here](https://www.rust-lang.org/tools/install)
+2. Run `cargo build --release` in the source folder
+3. Release build can be found `./target/release/M0nkrus-Adobe-Tracker.exe`
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 License - see the [LICENSE](LICENSE) file for details.
